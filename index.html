@@ -35,7 +35,7 @@
         }
 
         header {
-            padding: 16px 16px 10px;
+            padding: 14px 16px 10px;
             background: #0f172a;
             border-bottom: 1px solid var(--line);
             position: sticky;
@@ -45,7 +45,7 @@
 
         header h1 {
             margin: 0;
-            font-size: 18px;
+            font-size: 17px;
             letter-spacing: .4px;
         }
 
@@ -55,11 +55,11 @@
         }
 
         main {
-            max-width: 900px;
+            max-width: 920px;
             margin: 0 auto;
-            padding: 14px;
+            padding: 12px;
             display: grid;
-            gap: 14px;
+            gap: 12px;
         }
 
         .card {
@@ -71,7 +71,7 @@
 
         .card h2 {
             margin: 0 0 10px;
-            font-size: 15px;
+            font-size: 14px;
             color: var(--acc);
             text-transform: uppercase;
             letter-spacing: .6px;
@@ -96,14 +96,14 @@
             border: 1px solid var(--line);
             background: #0b1324;
             color: var(--text);
-            padding: 10px 12px;
-            font-size: 14px;
+            padding: 9px 11px;
+            font-size: 13px;
         }
 
         input,
         select {
             flex: 1;
-            min-width: 140px;
+            min-width: 130px;
         }
 
         button {
@@ -120,6 +120,11 @@
             border: 1px solid var(--line);
         }
 
+        button.sm {
+            padding: 6px 9px;
+            font-size: 12px;
+        }
+
         button.bad {
             background: #3b1620;
             color: #fca5a5;
@@ -129,7 +134,7 @@
         }
 
         .timer-big {
-            font-size: 44px;
+            font-size: 42px;
             font-weight: 800;
             font-variant-numeric: tabular-nums;
             margin: 8px 0;
@@ -158,7 +163,7 @@
             justify-content: space-between;
             align-items: center;
             gap: 10px;
-            padding: 10px;
+            padding: 9px 4px;
             border-bottom: 1px solid var(--line);
         }
 
@@ -173,6 +178,17 @@
             background: #1e293b;
             color: var(--acc);
             display: inline-block;
+        }
+
+        .tag-ok {
+            background: #143326;
+            color: #4ade80;
+        }
+
+        .tag-now {
+            background: #0c3547;
+            color: #38bdf8;
+            border: 1px solid #38bdf8;
         }
 
         .grid2 {
@@ -224,8 +240,8 @@
             background: none;
             color: var(--muted);
             border-radius: 0;
-            padding: 12px 4px;
-            font-size: 12px;
+            padding: 12px 2px;
+            font-size: 11px;
             font-weight: 600;
         }
 
@@ -240,7 +256,7 @@
 
         .tab.active {
             display: grid;
-            gap: 14px;
+            gap: 12px;
         }
 
         .urgent {
@@ -252,6 +268,78 @@
             color: var(--warn);
             font-weight: 700;
         }
+
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 8px;
+        }
+
+        .cal-hdr {
+            text-align: center;
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 700;
+            padding: 4px 0;
+        }
+
+        .cal-cell {
+            min-height: 54px;
+            background: #0e172a;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 5px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .cal-cell.today {
+            border-color: var(--ok);
+        }
+
+        .cal-cell.sel {
+            border-color: var(--acc);
+            background: #122742;
+        }
+
+        .dots {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .d-ex {
+            background: var(--bad);
+        }
+
+        .d-hw {
+            background: var(--acc);
+        }
+
+        .d-log {
+            background: var(--ok);
+        }
+
+        .phase-box {
+            background: #0e1b30;
+            border: 1px solid #264266;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
@@ -262,7 +350,7 @@
     <main>
         <section id='tab-today' class='tab active'>
             <div class='card now-box'>
-                <h2>Right Now on Your 40h Schedule</h2>
+                <h2>Right Now</h2>
                 <div id='nowBlock' style='font-size:16px;font-weight:700;'></div>
                 <div id='nextBlock' style='font-size:13px;color:var(--muted);margin-top:4px;'></div>
             </div>
@@ -291,6 +379,42 @@
                 </div>
                 <div id='subjectBreakdown'></div>
             </div>
+            <div class='card'>
+                <h2>Full Today &amp; Work-Ahead Queue</h2>
+                <div id='todayFullList'></div>
+                <h2 style='margin-top:14px;color:var(--warn);'>Tomorrow (Pull Ahead Anytime)</h2>
+                <div id='tomorrowList'></div>
+            </div>
+        </section>
+        <section id='tab-week' class='tab'>
+            <div class='card'>
+                <h2>Complete 40-Hour Weekly Schedule (Mon - Sun)</h2><small
+                    style='color:var(--muted);display:block;margin-bottom:8px;'>Click Start on any block to work on it
+                    right now, even ahead of schedule.</small>
+                <div id='fullWeekContainer'></div>
+            </div>
+        </section>
+        <section id='tab-cal' class='tab'>
+            <div class='card'>
+                <div class='row' style='justify-content:space-between;'><button class='sec sm' id='btnPrevM'>&larr;
+                        Prev</button><strong id='calMonthLabel' style='font-size:15px;'></strong><button class='sec sm'
+                        id='btnNextM'>Next &rarr;</button></div>
+                <div class='phase-box' id='monthPhaseBox'></div>
+                <div class='row' style='margin-bottom:8px;'><input id='mgInput'
+                        placeholder='Add personal goal for this month...'><button class='sm' id='btnAddMg'>Add
+                        Goal</button></div>
+                <div id='monthGoalList' style='margin-bottom:8px;'></div>
+                <div class='cal-grid' id='calGrid'></div>
+                <div style='margin-top:8px;font-size:11px;color:var(--muted);'><span class='dot d-ex'></span> Exam
+                    &nbsp; <span class='dot d-hw'></span> HW/Event &nbsp; <span class='dot d-log'></span> Studied</div>
+            </div>
+            <div class='card'>
+                <h2>Selected Day: <span id='selDayTitle'></span></h2>
+                <div id='selDayDetails'></div>
+                <div class='row' style='margin-top:10px;'><input id='calTaskTitle'
+                        placeholder='Quick add HW/plan to selected day...'><button class='sm' id='btnCalAddTask'>Add to
+                        Day</button></div>
+            </div>
         </section>
         <section id='tab-tasks' class='tab'>
             <div class='card'>
@@ -317,8 +441,6 @@
                         id='btnAddRes'>Add Link</button></div>
                 <div class='grid2' id='resGrid'></div>
             </div>
-        </section>
-        <section id='tab-road' class='tab'>
             <div class='card'>
                 <h2>GNC Transformation Milestones</h2>
                 <div id='roadmapList'></div>
@@ -332,9 +454,10 @@
             </div>
         </section>
     </main>
-    <nav><button class='active' data-tab='today'>Today</button><button data-tab='tasks'>Exams &amp; HW</button><button
-            data-tab='res'>Resources</button><button data-tab='road'>Roadmap</button></nav>
-    <script>const SCHEDULE = { 1: [[8, 0, 9, 30, 'C++ Daily Drill (Home)'], [11, 15, 13, 55, 'Campus: Gunes Enerjisi Tabanli Hidrojen (D-703)'], [16, 30, 18, 0, 'ANSYS Spine Wrap-up / Thesis']], 2: [[9, 0, 13, 0, 'Deep Work: Thesis 6-DoF & Math (Home)'], [14, 0, 18, 0, 'Deep Work: C++ / Simulink Translation (Home)']], 3: [[8, 30, 12, 0, 'Math I & Control Hand Calculations (Home)'], [14, 0, 16, 40, 'Campus: Muhendislik Matematigi I (D-738)']], 4: [[11, 15, 13, 55, 'Campus: Classical Control Theory (D-738)'], [14, 0, 16, 40, 'Campus: Modal Olcum ve Analiz (D-738)'], [16, 45, 17, 30, 'Office Hours: Bilgic / Hacioglu / Burkan']], 5: [[9, 0, 13, 0, 'Deep Work: Changing-Mass Control Design (Home)'], [14, 0, 18, 0, 'Deep Work: Linux, Git, Python / PX4 (Home)']], 6: [[10, 0, 16, 0, 'Hardware & Embedded Maker Lab (Teensy/STM32)']], 0: [[17, 0, 19, 0, 'Weekly Review, Git Audit & Next Week Plan']] }; const DEFAULT_RES = [{ name: 'LearnCpp.com', url: 'https://www.learncpp.com/', note: 'Core Modern C++ (Ch 0-15)' }, { name: '3Blue1Brown Linear Algebra', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab', note: 'Rebuild math intuition fast' }, { name: 'Brian Douglas Control', url: 'https://www.youtube.com/@BrianBDouglas', note: 'Classical & discrete control' }, { name: 'Steve Brunton Control Bootcamp', url: 'https://www.youtube.com/playlist?list=PLMrJAkhIeNNR20Mz-VpzgfQs5zrYi085m', note: 'State-Space, LQR, Kalman' }, { name: 'Christopher Lum Flight Mech', url: 'https://www.youtube.com/@ChristopherLum', note: '6-DoF nonlinear flight sim' }, { name: 'dRehmFlight (Teensy)', url: 'https://github.com/nickrehm/dRehmFlight', note: '800-line readable flight code' }, { name: 'Phil Lab (STM32 & EKF)', url: 'https://www.youtube.com/@PhilsLab', note: 'Embedded C, Kalman, PCB' }, { name: 'PX4 Autopilot Docs', url: 'https://docs.px4.io/main/en/simulation/', note: 'Industry SIL/Gazebo stack' }, { name: 'MathWorks Academy', url: 'https://matlabacademy.mathworks.com/', note: 'Free MATLAB & Simulink Onramps' }, { name: 'SSA GSK Okulu', url: 'https://gskokulu.ssa.gov.tr/', note: 'Turkish Defense GNC Program' }]; const DEFAULT_ROAD = [{ id: 1, text: 'Push existing 1m Simulink drone files to GitHub', done: false }, { id: 2, text: 'Meet Dr. Bogac Bilgic to align changing-mass thesis scope', done: false }, { id: 3, text: 'Finish ANSYS sacrum FEA correction cleanly', done: false }, { id: 4, text: 'LearnCpp Ch 0-15 + write C++ 3x3 Matrix & RK4 integrator', done: false }, { id: 5, text: 'Build full 6-DoF nonlinear variable-mass quadrotor model', done: false }, { id: 6, text: 'Compare PID vs LQR vs Adaptive/Sliding Mode controller', done: false }, { id: 7, text: 'Read dRehmFlight or PX4 EKF2 & test on hardware', done: false }]; let state = JSON.parse(localStorage.getItem('gncState') || 'null') || { exams: [], tasks: [], logs: [], resources: DEFAULT_RES, roadmap: DEFAULT_ROAD }; function save() { localStorage.setItem('gncState', JSON.stringify(state)); } let timerRun = false, elapsedMs = 0, lastTick = 0; function fmt(sec) { const h = String(Math.floor(sec / 3600)).padStart(2, '0'), m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0'), s = String(sec % 60).padStart(2, '0'); return h + ':' + m + ':' + s; } function toggleTimer() { if (!timerRun) { timerRun = true; lastTick = Date.now(); document.getElementById('btnStartPause').textContent = 'Pause'; } else { elapsedMs += Date.now() - lastTick; timerRun = false; document.getElementById('btnStartPause').textContent = 'Resume'; } } function resetTimer() { timerRun = false; elapsedMs = 0; document.getElementById('btnStartPause').textContent = 'Start Session'; document.getElementById('timerDisplay').textContent = '00:00:00'; } function saveSession() { if (timerRun) { elapsedMs += Date.now() - lastTick; timerRun = false; } const mins = Math.round(elapsedMs / 60000); if (mins < 1) { alert('Study at least 1 minute before logging.'); return; } const note = prompt('1-line engineering log (e.g. Verified Bode margins / Git commit):', '') || 'Focused study'; state.logs.unshift({ id: Date.now(), subject: document.getElementById('timerSubject').value, mins: mins, note: note, date: new Date().toISOString() }); save(); resetTimer(); renderAll(); } function updateClockAndNow() { const now = new Date(); document.getElementById('clockLine').textContent = now.toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); if (timerRun) { const totalSec = Math.floor((elapsedMs + (Date.now() - lastTick)) / 1000); document.getElementById('timerDisplay').textContent = fmt(totalSec); } const d = now.getDay(), curMin = now.getHours() * 60 + now.getMinutes(), blocks = SCHEDULE[d] || []; let active = null, upcoming = null; for (const b of blocks) { const s = b[0] * 60 + b[1], e = b[2] * 60 + b[3]; if (curMin >= s && curMin <= e) active = b; else if (curMin < s && !upcoming) upcoming = b; } document.getElementById('nowBlock').textContent = active ? active[4] + ' (' + String(active[0]).padStart(2, '0') + ':' + String(active[1]).padStart(2, '0') + '-' + String(active[2]).padStart(2, '0') + ':' + String(active[3]).padStart(2, '0') + ')' : 'Buffer / Rest / Catch-up Time'; document.getElementById('nextBlock').textContent = upcoming ? 'Up next: ' + upcoming[4] + ' at ' + String(upcoming[0]).padStart(2, '0') + ':' + String(upcoming[1]).padStart(2, '0') : 'No more scheduled blocks today.'; } function weekStart() { const d = new Date(), day = d.getDay(), diff = d.getDate() - day + (day === 0 ? -6 : 1); return new Date(d.getFullYear(), d.getMonth(), diff, 0, 0, 0).getTime(); } function renderToday() { const ws = weekStart(), weekLogs = state.logs.filter(l => new Date(l.date).getTime() >= ws); const totalMin = weekLogs.reduce((a, b) => a + b.mins, 0), hrs = (totalMin / 60).toFixed(1); document.getElementById('weekSummary').textContent = hrs + ' / 40.0 hours logged this week'; document.getElementById('weekBar').style.width = Math.min(100, (totalMin / 2400) * 100) + '%'; const bySub = {}; weekLogs.forEach(l => { bySub[l.subject] = (bySub[l.subject] || 0) + l.mins; }); document.getElementById('subjectBreakdown').innerHTML = Object.entries(bySub).map(([k, v]) => `<div class='item'><span>` + k + `</span><span class='tag'>` + (v / 60).toFixed(1) + ` h</span></div>`).join('') || `<small style='color:var(--muted)'>No sessions logged this week yet.</small>`; } function addExam() { const t = document.getElementById('exTitle').value.trim(), d = document.getElementById('exDate').value; if (!t || !d) return; state.exams.push({ id: Date.now(), title: t, date: d }); state.exams.sort((a, b) => new Date(a.date) - new Date(b.date)); save(); document.getElementById('exTitle').value = ''; renderTasks(); } function addTask() { const t = document.getElementById('hwTitle').value.trim(), c = document.getElementById('hwCourse').value.trim() || 'General', d = document.getElementById('hwDate').value; if (!t || !d) return; state.tasks.push({ id: Date.now(), title: t, course: c, date: d, done: false }); state.tasks.sort((a, b) => new Date(a.date) - new Date(b.date)); save(); document.getElementById('hwTitle').value = ''; renderTasks(); } function dlICS(title, dateStr) { const dt = new Date(dateStr), pad = n => String(n).padStart(2, '0'), NL = String.fromCharCode(13, 10); const fmtD = x => x.getUTCFullYear() + pad(x.getUTCMonth() + 1) + pad(x.getUTCDate()) + 'T' + pad(x.getUTCHours()) + pad(x.getUTCMinutes()) + '00Z'; const end = new Date(dt.getTime() + 3600000); const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'BEGIN:VEVENT', 'SUMMARY:' + title, 'DTSTART:' + fmtD(dt), 'DTEND:' + fmtD(end), 'BEGIN:VALARM', 'TRIGGER:-PT60M', 'ACTION:DISPLAY', 'DESCRIPTION:Reminder', 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join(NL); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' })); a.download = 'reminder.ics'; a.click(); } function dlExamIcs(id) { const e = state.exams.find(x => x.id === id); if (e) dlICS(e.title, e.date); } function dlTaskIcs(id) { const t = state.tasks.find(x => x.id === id); if (t) dlICS(t.title, t.date); } function renderTasks() { const now = Date.now(); document.getElementById('examList').innerHTML = state.exams.map(e => { const diff = new Date(e.date) - now, days = Math.floor(diff / 86400000), hrs = Math.floor((diff % 86400000) / 3600000); const cls = days < 5 ? 'urgent' : (days < 14 ? 'soon' : ''); const cd = diff > 0 ? days + 'd ' + hrs + 'h left' : 'Exam Passed'; return `<div class='item'><div><strong>` + e.title + `</strong><br><small style='color:var(--muted)'>` + new Date(e.date).toLocaleString() + `</small></div><div class='row'><span class='` + cls + `'>` + cd + `</span><button class='sec' onclick='dlExamIcs(` + e.id + `)'>iOS Cal</button><button class='bad' onclick='delExam(` + e.id + `)'>X</button></div></div>`; }).join('') || `<small style='color:var(--muted)'>Add your Midterms &amp; Finals above.</small>`; document.getElementById('taskList').innerHTML = state.tasks.map(t => `<div class='item'><div><input type='checkbox' ` + (t.done ? `checked` : ``) + ` onchange='togTask(` + t.id + `)' style='min-width:auto;flex:0;'> <span style='` + (t.done ? `text-decoration:line-through;color:var(--muted)` : ``) + `'>` + t.title + `</span> <span class='tag'>` + t.course + `</span><br><small style='color:var(--muted)'>Due: ` + new Date(t.date).toLocaleString() + `</small></div><div class='row'><button class='sec' onclick='dlTaskIcs(` + t.id + `)'>iOS Cal</button><button class='bad' onclick='delTask(` + t.id + `)'>X</button></div></div>`).join('') || `<small style='color:var(--muted)'>No homework or events yet.</small>`; } function delExam(id) { state.exams = state.exams.filter(x => x.id !== id); save(); renderTasks(); } function delTask(id) { state.tasks = state.tasks.filter(x => x.id !== id); save(); renderTasks(); } function togTask(id) { const t = state.tasks.find(x => x.id === id); if (t) { t.done = !t.done; save(); renderTasks(); } } function addResource() { const n = document.getElementById('resName').value.trim(), u = document.getElementById('resUrl').value.trim(), o = document.getElementById('resNote').value.trim(); if (!n || !u) return; state.resources.unshift({ name: n, url: u, note: o }); save(); document.getElementById('resName').value = ''; document.getElementById('resUrl').value = ''; renderRes(); } function renderRes() { document.getElementById('resGrid').innerHTML = state.resources.map(r => `<a class='res' href='` + r.url + `' target='_blank' rel='noopener'><strong>` + r.name + ` &rarr;</strong><span>` + r.note + `</span></a>`).join(''); } function renderRoad() { document.getElementById('roadmapList').innerHTML = state.roadmap.map(m => `<div class='item'><div><input type='checkbox' ` + (m.done ? `checked` : ``) + ` onchange='togRoad(` + m.id + `)' style='min-width:auto;flex:0;'> <span style='` + (m.done ? `text-decoration:line-through;color:var(--muted)` : ``) + `'>` + m.text + `</span></div></div>`).join(''); document.getElementById('logList').innerHTML = state.logs.slice(0, 15).map(l => `<div class='item'><div><strong>` + l.subject + `</strong> (` + l.mins + ` min)<br><small style='color:var(--muted)'>` + l.note + ` - ` + new Date(l.date).toLocaleDateString() + `</small></div></div>`).join('') || `<small style='color:var(--muted)'>No logged sessions yet.</small>`; } function togRoad(id) { const m = state.roadmap.find(x => x.id === id); if (m) { m.done = !m.done; save(); renderRoad(); } } function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' })); a.download = 'gnc-backup.json'; a.click(); } function importData(e) { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = ev => { state = JSON.parse(ev.target.result); save(); renderAll(); }; r.readAsText(f); } document.getElementById('btnStartPause').onclick = toggleTimer; document.getElementById('btnSaveSess').onclick = saveSession; document.getElementById('btnResetSess').onclick = resetTimer; document.getElementById('btnAddEx').onclick = addExam; document.getElementById('btnAddHw').onclick = addTask; document.getElementById('btnAddRes').onclick = addResource; document.getElementById('btnExp').onclick = exportData; document.getElementById('btnImp').onclick = function () { document.getElementById('impFile').click(); }; document.getElementById('impFile').onchange = importData; document.querySelectorAll('nav button').forEach(btn => { btn.onclick = function () { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('nav button').forEach(b => b.classList.remove('active')); document.getElementById('tab-' + btn.dataset.tab).classList.add('active'); btn.classList.add('active'); }; }); function renderAll() { renderToday(); renderTasks(); renderRes(); renderRoad(); updateClockAndNow(); } if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').catch(() => { }); } setInterval(updateClockAndNow, 1000); renderAll();</script>
+    <nav><button class='active' data-tab='today'>Today</button><button data-tab='week'>Week</button><button
+            data-tab='cal'>Calendar</button><button data-tab='tasks'>Tasks</button><button data-tab='res'>Vault</button>
+    </nav>
+    <script>const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; const WEEK_ORDER = [1, 2, 3, 4, 5, 6, 0]; const SCHEDULE = { 1: [[8, 0, 9, 30, 'C++ Daily Drill (Home)', 'C++ / Embedded'], [11, 15, 13, 55, 'Campus: Gunes Enerjisi Tabanli Hidrojen (D-703)', 'Hidrojen Ekonomisi'], [16, 30, 18, 0, 'ANSYS Spine Wrap-up / Thesis', 'ANSYS Spine Wrap-up']], 2: [[9, 0, 13, 0, 'Deep Work: Thesis 6-DoF & Math (Home)', 'Thesis 6-DoF / Simulink'], [14, 0, 18, 0, 'Deep Work: C++ / Simulink Translation (Home)', 'C++ / Embedded']], 3: [[8, 30, 12, 0, 'Math I & Control Hand Calculations (Home)', 'Muhendislik Matematigi I'], [14, 0, 16, 40, 'Campus: Muhendislik Matematigi I (D-738)', 'Muhendislik Matematigi I']], 4: [[11, 15, 13, 55, 'Campus: Classical Control Theory (D-738)', 'Classical Control Theory'], [14, 0, 16, 40, 'Campus: Modal Olcum ve Analiz (D-738)', 'Modal Olcum ve Analiz'], [16, 45, 17, 30, 'Office Hours: Bilgic / Hacioglu / Burkan', 'Thesis 6-DoF / Simulink']], 5: [[9, 0, 13, 0, 'Deep Work: Changing-Mass Control Design (Home)', 'Thesis 6-DoF / Simulink'], [14, 0, 18, 0, 'Deep Work: Linux, Git, Python / PX4 (Home)', 'C++ / Embedded']], 6: [[10, 0, 16, 0, 'Hardware & Embedded Maker Lab (Teensy/STM32)', 'Hardware / Maker Lab']], 0: [[17, 0, 19, 0, 'Weekly Review, Git Audit & Next Week Plan', 'Thesis 6-DoF / Simulink']] }; const MONTHLY_PLAN = { '2026-11': 'Phase 1 Start: GitHub setup, meet Dr. Bogac Bilgic, LearnCpp Ch 0-5, Classical Control & Math I foundations', '2026-12': 'Phase 1 Finish: LearnCpp Ch 6-15, C++ 3x3 Matrix + RK4 integrator, Midterm/Final prep, close ANSYS spine work', '2027-01': 'Phase 2 Start: Derive 6-DoF nonlinear variable-mass drone equations m(t), I(t); build & verify Simulink model', '2027-02': 'Phase 2 Core: State-Space, LQR, Complementary & EKF sensor fusion on noisy drone; Python Monte Carlo plots', '2027-03': 'Phase 2/3 Bridge: Adaptive / Sliding Mode control showdown for changing mass; Spring lectures (State Space / Nonlinear)', '2027-04': 'Phase 3 Start: Discretize controller to C++; Ubuntu Linux + PX4 Gazebo SITL simulation setup', '2027-05': 'Phase 3 Core: dRehmFlight (Teensy) or STM32 IMU + filter firmware; Spring finals & thesis simulation lock', '2027-06': 'Phase 3 Hardware: Physical quadcopter / test rig with payload-drop servo; compare real flight logs vs Simulink', '2027-07': 'Phase 4 Start: Thesis writing + error analysis (real vs 6-DoF sim); polish GitHub repositories', '2027-08': 'Phase 4 Core: Record flight/sim demo videos; apply to SSA GSK Okulu & Baykar / TUSAS / Roketsan / Aselsan', '2027-09': 'Phase 4 Finish: Thesis defense prep & mock GNC technical interviews (dynamics, Bode, LQR, EKF, C++)' }; const DEFAULT_RES = [{ name: 'LearnCpp.com', url: 'https://www.learncpp.com/', note: 'Core Modern C++ (Ch 0-15)' }, { name: '3Blue1Brown Linear Algebra', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab', note: 'Rebuild math intuition fast' }, { name: 'Brian Douglas Control', url: 'https://www.youtube.com/@BrianBDouglas', note: 'Classical & discrete control' }, { name: 'Steve Brunton Control Bootcamp', url: 'https://www.youtube.com/playlist?list=PLMrJAkhIeNNR20Mz-VpzgfQs5zrYi085m', note: 'State-Space, LQR, Kalman' }, { name: 'Christopher Lum Flight Mech', url: 'https://www.youtube.com/@ChristopherLum', note: '6-DoF nonlinear flight sim' }, { name: 'dRehmFlight (Teensy)', url: 'https://github.com/nickrehm/dRehmFlight', note: '800-line readable flight code' }, { name: 'Phil Lab (STM32 & EKF)', url: 'https://www.youtube.com/@PhilsLab', note: 'Embedded C, Kalman, PCB' }, { name: 'PX4 Autopilot Docs', url: 'https://docs.px4.io/main/en/simulation/', note: 'Industry SIL/Gazebo stack' }, { name: 'MathWorks Academy', url: 'https://matlabacademy.mathworks.com/', note: 'Free MATLAB & Simulink Onramps' }, { name: 'SSA GSK Okulu', url: 'https://gskokulu.ssa.gov.tr/', note: 'Turkish Defense GNC Program' }]; const DEFAULT_ROAD = [{ id: 1, text: 'Push existing 1m Simulink drone files to GitHub', done: false }, { id: 2, text: 'Meet Dr. Bogac Bilgic to align changing-mass thesis scope', done: false }, { id: 3, text: 'Finish ANSYS sacrum FEA correction cleanly', done: false }, { id: 4, text: 'LearnCpp Ch 0-15 + write C++ 3x3 Matrix & RK4 integrator', done: false }, { id: 5, text: 'Build full 6-DoF nonlinear variable-mass quadrotor model', done: false }, { id: 6, text: 'Compare PID vs LQR vs Adaptive/Sliding Mode controller', done: false }, { id: 7, text: 'Read dRehmFlight or PX4 EKF2 & test on hardware', done: false }]; let state = JSON.parse(localStorage.getItem('gncState') || 'null') || { exams: [], tasks: [], logs: [], resources: DEFAULT_RES, roadmap: DEFAULT_ROAD, monthGoals: {} }; if (!state.monthGoals) state.monthGoals = {}; function save() { localStorage.setItem('gncState', JSON.stringify(state)); } function pad2(n) { return String(n).padStart(2, '0'); } function localYMD(dt) { return dt.getFullYear() + '-' + pad2(dt.getMonth() + 1) + '-' + pad2(dt.getDate()); } function fmtTime(b) { return pad2(b[0]) + ':' + pad2(b[1]) + '-' + pad2(b[2]) + ':' + pad2(b[3]); } let timerRun = false, elapsedMs = 0, lastTick = 0; function fmt(sec) { return pad2(Math.floor(sec / 3600)) + ':' + pad2(Math.floor((sec % 3600) / 60)) + ':' + pad2(sec % 60); } function toggleTimer() { if (!timerRun) { timerRun = true; lastTick = Date.now(); document.getElementById('btnStartPause').textContent = 'Pause'; } else { elapsedMs += Date.now() - lastTick; timerRun = false; document.getElementById('btnStartPause').textContent = 'Resume'; } } function resetTimer() { timerRun = false; elapsedMs = 0; document.getElementById('btnStartPause').textContent = 'Start Session'; document.getElementById('timerDisplay').textContent = '00:00:00'; } function startWithSubject(subj) { document.getElementById('timerSubject').value = subj; if (!timerRun) { toggleTimer(); } switchTab('today'); window.scrollTo({ top: 0, behavior: 'smooth' }); } function saveSession() { if (timerRun) { elapsedMs += Date.now() - lastTick; timerRun = false; } const mins = Math.round(elapsedMs / 60000); if (mins < 1) { alert('Study at least 1 minute before logging.'); return; } const note = prompt('1-line engineering log (e.g. Verified Bode margins / Git commit):', '') || 'Focused study'; state.logs.unshift({ id: Date.now(), subject: document.getElementById('timerSubject').value, mins: mins, note: note, date: new Date().toISOString() }); save(); resetTimer(); renderAll(); } function updateClockAndNow() { const now = new Date(); document.getElementById('clockLine').textContent = now.toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); if (timerRun) { const totalSec = Math.floor((elapsedMs + (Date.now() - lastTick)) / 1000); document.getElementById('timerDisplay').textContent = fmt(totalSec); } const d = now.getDay(), curMin = now.getHours() * 60 + now.getMinutes(), blocks = SCHEDULE[d] || []; let active = null, upcoming = null; for (const b of blocks) { const s = b[0] * 60 + b[1], e = b[2] * 60 + b[3]; if (curMin >= s && curMin <= e) active = b; else if (curMin < s && !upcoming) upcoming = b; } document.getElementById('nowBlock').textContent = active ? active[4] + ' (' + fmtTime(active) + ')' : 'Flexible Slot — Pick Any Block Below or Pull From Tomorrow!'; document.getElementById('nextBlock').textContent = upcoming ? 'Up next today: ' + upcoming[4] + ' at ' + pad2(upcoming[0]) + ':' + pad2(upcoming[1]) : 'Today blocks finished — feel free to start Tomorrow blocks below or log Bonus Deep Work.'; } function weekStart() { const d = new Date(), day = d.getDay(), diff = d.getDate() - day + (day === 0 ? -6 : 1); return new Date(d.getFullYear(), d.getMonth(), diff, 0, 0, 0).getTime(); } function renderToday() { const now = new Date(), d = now.getDay(), curMin = now.getHours() * 60 + now.getMinutes(), todayBlocks = SCHEDULE[d] || [], tomDay = (d + 1) % 7, tomBlocks = SCHEDULE[tomDay] || []; document.getElementById('todayFullList').innerHTML = todayBlocks.map(b => { const s = b[0] * 60 + b[1], e = b[2] * 60 + b[3], st = curMin >= s && curMin <= e ? `<span class='tag tag-now'>NOW</span>` : (curMin > e ? `<span class='tag tag-ok'>PAST</span>` : `<span class='tag'>LATER</span>`); return `<div class='item'><div>` + st + ` <strong>` + b[4] + `</strong><br><small style='color:var(--muted)'>` + fmtTime(b) + `</small></div><button class='sm sec' onclick="startWithSubject('` + b[5] + `')">Start</button></div>`; }).join('') || `<small style='color:var(--muted)'>No fixed lectures today.</small>`; document.getElementById('tomorrowList').innerHTML = tomBlocks.map(b => `<div class='item'><div><span class='tag'>` + DAY_NAMES[tomDay] + `</span> <strong>` + b[4] + `</strong><br><small style='color:var(--muted)'>` + fmtTime(b) + `</small></div><button class='sm' onclick="startWithSubject('` + b[5] + `')">Start Ahead</button></div>`).join(''); const ws = weekStart(), weekLogs = state.logs.filter(l => new Date(l.date).getTime() >= ws); const totalMin = weekLogs.reduce((a, b) => a + b.mins, 0), hrs = (totalMin / 60).toFixed(1); document.getElementById('weekSummary').textContent = hrs + ' / 40.0 hours logged this week'; document.getElementById('weekBar').style.width = Math.min(100, (totalMin / 2400) * 100) + '%'; const bySub = {}; weekLogs.forEach(l => { bySub[l.subject] = (bySub[l.subject] || 0) + l.mins; }); document.getElementById('subjectBreakdown').innerHTML = Object.entries(bySub).map(([k, v]) => `<div class='item'><span>` + k + `</span><span class='tag'>` + (v / 60).toFixed(1) + ` h</span></div>`).join('') || `<small style='color:var(--muted)'>No sessions logged this week yet.</small>`; } function renderWeek() { const todayDow = new Date().getDay(); document.getElementById('fullWeekContainer').innerHTML = WEEK_ORDER.map(dow => { const isT = dow === todayDow, blocks = SCHEDULE[dow] || []; return `<div style='margin-bottom:12px;padding:10px;border:1px solid ` + (isT ? `var(--acc)` : `var(--line)`) + `;border-radius:10px;background:#0e172a;'><strong style='color:` + (isT ? `var(--acc)` : `var(--text)`) + `'>` + DAY_NAMES[dow] + (isT ? ` (TODAY)` : ``) + `</strong>` + blocks.map(b => `<div class='item'><div><span>` + b[4] + `</span><br><small style='color:var(--muted)'>` + fmtTime(b) + `</small></div><button class='sm sec' onclick="startWithSubject('` + b[5] + `')">Start</button></div>`).join('') + `</div>`; }).join(''); } let calYear = new Date().getFullYear(), calMonth = new Date().getMonth(), selYMD = localYMD(new Date()); function renderCal() { const ym = calYear + '-' + pad2(calMonth + 1), mName = new Date(calYear, calMonth, 1).toLocaleString('en-US', { month: 'long', year: 'numeric' }); document.getElementById('calMonthLabel').textContent = mName; document.getElementById('monthPhaseBox').innerHTML = `<strong>Monthly GNC Mission (` + ym + `):</strong><br>` + (MONTHLY_PLAN[ym] || 'Custom / Thesis & Interview Sprint — stay consistent with 40h/week & Git commits.'); const mGoals = state.monthGoals[ym] || []; document.getElementById('monthGoalList').innerHTML = mGoals.map(g => `<div class='item'><div><input type='checkbox' ` + (g.done ? `checked` : ``) + ` onchange="togMg('` + ym + `',` + g.id + `)" style='min-width:auto;flex:0;'> <span style='` + (g.done ? `text-decoration:line-through;color:var(--muted)` : ``) + `'>` + g.text + `</span></div><button class='bad' onclick="delMg('` + ym + `',` + g.id + `)">X</button></div>`).join('') || `<small style='color:var(--muted)'>No custom goals added for this month yet.</small>`; const hdr = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map(x => `<div class='cal-hdr'>` + x + `</div>`).join(''); const offset = (new Date(calYear, calMonth, 1).getDay() + 6) % 7, daysInM = new Date(calYear, calMonth + 1, 0).getDate(), todayStr = localYMD(new Date()); let cells = ''; for (let i = 0; i < offset; i++)cells += `<div></div>`; for (let day = 1; day <= daysInM; day++) { const dStr = ym + '-' + pad2(day); const hasEx = state.exams.some(e => e.date.slice(0, 10) === dStr); const hasHw = state.tasks.some(t => t.date.slice(0, 10) === dStr && !t.done); const hasLog = state.logs.some(l => localYMD(new Date(l.date)) === dStr); const cls = 'cal-cell' + (dStr === todayStr ? ' today' : '') + (dStr === selYMD ? ' sel' : ''); cells += `<div class='` + cls + `' onclick="pickDay('` + dStr + `')"><strong>` + day + `</strong><div class='dots'>` + (hasEx ? `<span class='dot d-ex'></span>` : ``) + (hasHw ? `<span class='dot d-hw'></span>` : ``) + (hasLog ? `<span class='dot d-log'></span>` : ``) + `</div></div>`; } document.getElementById('calGrid').innerHTML = hdr + cells; renderSelDay(); } function pickDay(dStr) { selYMD = dStr; renderCal(); } function renderSelDay() { const parts = selYMD.split('-'), dt = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])), dow = dt.getDay(); document.getElementById('selDayTitle').textContent = selYMD + ' (' + DAY_NAMES[dow] + ')'; const blocks = SCHEDULE[dow] || [], exs = state.exams.filter(e => e.date.slice(0, 10) === selYMD), hws = state.tasks.filter(t => t.date.slice(0, 10) === selYMD), logs = state.logs.filter(l => localYMD(new Date(l.date)) === selYMD); let html = ''; if (exs.length) html += exs.map(e => `<div class='item'><strong class='urgent'>EXAM: ` + e.title + `</strong><span class='tag'>` + e.date.slice(11, 16) + `</span></div>`).join(''); if (hws.length) html += hws.map(t => `<div class='item'><span>HW/Event: ` + t.title + ` <span class='tag'>` + t.course + `</span></span></div>`).join(''); if (logs.length) { const tm = logs.reduce((a, b) => a + b.mins, 0); html += `<div class='item'><span class='tag tag-ok'>Logged: ` + (tm / 60).toFixed(1) + ` h (` + logs.length + ` sessions)</span></div>`; } html += `<div style='margin-top:6px;font-size:12px;color:var(--muted);'>Weekly template for ` + DAY_NAMES[dow] + `:</div>` + blocks.map(b => `<div class='item'><span>` + b[4] + ` (` + fmtTime(b) + `)</span><button class='sm sec' onclick="startWithSubject('` + b[5] + `')">Start</button></div>`).join(''); document.getElementById('selDayDetails').innerHTML = html; } function addMg() { const ym = calYear + '-' + pad2(calMonth + 1), txt = document.getElementById('mgInput').value.trim(); if (!txt) return; if (!state.monthGoals[ym]) state.monthGoals[ym] = []; state.monthGoals[ym].push({ id: Date.now(), text: txt, done: false }); save(); document.getElementById('mgInput').value = ''; renderCal(); } function togMg(ym, id) { const g = (state.monthGoals[ym] || []).find(x => x.id === id); if (g) { g.done = !g.done; save(); renderCal(); } } function delMg(ym, id) { state.monthGoals[ym] = (state.monthGoals[ym] || []).filter(x => x.id !== id); save(); renderCal(); } function calAddTask() { const t = document.getElementById('calTaskTitle').value.trim(); if (!t) return; state.tasks.push({ id: Date.now(), title: t, course: 'Calendar', date: selYMD + 'T12:00', done: false }); state.tasks.sort((a, b) => new Date(a.date) - new Date(b.date)); save(); document.getElementById('calTaskTitle').value = ''; renderAll(); } function addExam() { const t = document.getElementById('exTitle').value.trim(), d = document.getElementById('exDate').value; if (!t || !d) return; state.exams.push({ id: Date.now(), title: t, date: d }); state.exams.sort((a, b) => new Date(a.date) - new Date(b.date)); save(); document.getElementById('exTitle').value = ''; renderAll(); } function addTask() { const t = document.getElementById('hwTitle').value.trim(), c = document.getElementById('hwCourse').value.trim() || 'General', d = document.getElementById('hwDate').value; if (!t || !d) return; state.tasks.push({ id: Date.now(), title: t, course: c, date: d, done: false }); state.tasks.sort((a, b) => new Date(a.date) - new Date(b.date)); save(); document.getElementById('hwTitle').value = ''; renderAll(); } function dlICS(title, dateStr) { const dt = new Date(dateStr), pad = n => String(n).padStart(2, '0'), NL = String.fromCharCode(13, 10); const fmtD = x => x.getUTCFullYear() + pad(x.getUTCMonth() + 1) + pad(x.getUTCDate()) + 'T' + pad(x.getUTCHours()) + pad(x.getUTCMinutes()) + '00Z'; const end = new Date(dt.getTime() + 3600000); const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'BEGIN:VEVENT', 'SUMMARY:' + title, 'DTSTART:' + fmtD(dt), 'DTEND:' + fmtD(end), 'BEGIN:VALARM', 'TRIGGER:-PT60M', 'ACTION:DISPLAY', 'DESCRIPTION:Reminder', 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join(NL); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' })); a.download = 'reminder.ics'; a.click(); } function dlExamIcs(id) { const e = state.exams.find(x => x.id === id); if (e) dlICS(e.title, e.date); } function dlTaskIcs(id) { const t = state.tasks.find(x => x.id === id); if (t) dlICS(t.title, t.date); } function renderTasks() { const now = Date.now(); document.getElementById('examList').innerHTML = state.exams.map(e => { const diff = new Date(e.date) - now, days = Math.floor(diff / 86400000), hrs = Math.floor((diff % 86400000) / 3600000); const cls = days < 5 ? 'urgent' : (days < 14 ? 'soon' : ''); const cd = diff > 0 ? days + 'd ' + hrs + 'h left' : 'Exam Passed'; return `<div class='item'><div><strong>` + e.title + `</strong><br><small style='color:var(--muted)'>` + new Date(e.date).toLocaleString() + `</small></div><div class='row'><span class='` + cls + `'>` + cd + `</span><button class='sec sm' onclick='dlExamIcs(` + e.id + `)'>iOS Cal</button><button class='bad' onclick='delExam(` + e.id + `)'>X</button></div></div>`; }).join('') || `<small style='color:var(--muted)'>Add your Midterms &amp; Finals above.</small>`; document.getElementById('taskList').innerHTML = state.tasks.map(t => `<div class='item'><div><input type='checkbox' ` + (t.done ? `checked` : ``) + ` onchange='togTask(` + t.id + `)' style='min-width:auto;flex:0;'> <span style='` + (t.done ? `text-decoration:line-through;color:var(--muted)` : ``) + `'>` + t.title + `</span> <span class='tag'>` + t.course + `</span><br><small style='color:var(--muted)'>Due: ` + new Date(t.date).toLocaleString() + `</small></div><div class='row'><button class='sec sm' onclick='dlTaskIcs(` + t.id + `)'>iOS Cal</button><button class='bad' onclick='delTask(` + t.id + `)'>X</button></div></div>`).join('') || `<small style='color:var(--muted)'>No homework or events yet.</small>`; } function delExam(id) { state.exams = state.exams.filter(x => x.id !== id); save(); renderAll(); } function delTask(id) { state.tasks = state.tasks.filter(x => x.id !== id); save(); renderAll(); } function togTask(id) { const t = state.tasks.find(x => x.id === id); if (t) { t.done = !t.done; save(); renderAll(); } } function addResource() { const n = document.getElementById('resName').value.trim(), u = document.getElementById('resUrl').value.trim(), o = document.getElementById('resNote').value.trim(); if (!n || !u) return; state.resources.unshift({ name: n, url: u, note: o }); save(); document.getElementById('resName').value = ''; document.getElementById('resUrl').value = ''; renderRes(); } function renderRes() { document.getElementById('resGrid').innerHTML = state.resources.map(r => `<a class='res' href='` + r.url + `' target='_blank' rel='noopener'><strong>` + r.name + ` &rarr;</strong><span>` + r.note + `</span></a>`).join(''); } function renderRoad() { document.getElementById('roadmapList').innerHTML = state.roadmap.map(m => `<div class='item'><div><input type='checkbox' ` + (m.done ? `checked` : ``) + ` onchange='togRoad(` + m.id + `)' style='min-width:auto;flex:0;'> <span style='` + (m.done ? `text-decoration:line-through;color:var(--muted)` : ``) + `'>` + m.text + `</span></div></div>`).join(''); document.getElementById('logList').innerHTML = state.logs.slice(0, 15).map(l => `<div class='item'><div><strong>` + l.subject + `</strong> (` + l.mins + ` min)<br><small style='color:var(--muted)'>` + l.note + ` - ` + new Date(l.date).toLocaleDateString() + `</small></div></div>`).join('') || `<small style='color:var(--muted)'>No logged sessions yet.</small>`; } function togRoad(id) { const m = state.roadmap.find(x => x.id === id); if (m) { m.done = !m.done; save(); renderRoad(); } } function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' })); a.download = 'gnc-backup.json'; a.click(); } function importData(e) { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = ev => { state = JSON.parse(ev.target.result); if (!state.monthGoals) state.monthGoals = {}; save(); renderAll(); }; r.readAsText(f); } function switchTab(id) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('nav button').forEach(b => { b.classList.toggle('active', b.dataset.tab === id); }); document.getElementById('tab-' + id).classList.add('active'); } document.getElementById('btnStartPause').onclick = toggleTimer; document.getElementById('btnSaveSess').onclick = saveSession; document.getElementById('btnResetSess').onclick = resetTimer; document.getElementById('btnAddEx').onclick = addExam; document.getElementById('btnAddHw').onclick = addTask; document.getElementById('btnAddRes').onclick = addResource; document.getElementById('btnExp').onclick = exportData; document.getElementById('btnImp').onclick = function () { document.getElementById('impFile').click(); }; document.getElementById('impFile').onchange = importData; document.getElementById('btnPrevM').onclick = function () { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCal(); }; document.getElementById('btnNextM').onclick = function () { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCal(); }; document.getElementById('btnAddMg').onclick = addMg; document.getElementById('btnCalAddTask').onclick = calAddTask; document.querySelectorAll('nav button').forEach(btn => { btn.onclick = function () { switchTab(btn.dataset.tab); }; }); function renderAll() { renderToday(); renderWeek(); renderCal(); renderTasks(); renderRes(); renderRoad(); updateClockAndNow(); } if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').catch(() => { }); } setInterval(updateClockAndNow, 1000); renderAll();</script>
 </body>
 
 </html>
