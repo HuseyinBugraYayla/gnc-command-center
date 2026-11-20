@@ -1,0 +1,16 @@
+{
+    "name": "GNC Command Center",
+    "short_name": "GNC Hub",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#0b1120",
+    "theme_color": "#0f172a",
+    "icons": [
+      {
+        "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%230f172a'/%3E%3Ctext x='96' y='118' font-size='78' text-anchor='middle' fill='%2338bdf8' font-family='sans-serif' font-weight='bold'%3EGNC%3C/text%3E%3C/svg%3E",
+        "sizes": "192x192",
+        "type": "image/svg+xml"
+      }
+    ]
+  }

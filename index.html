@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, viewport-fit=cover'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black-translucent'>
+    <meta name='theme-color' content='#0f172a'>
+    <link rel='manifest' href='manifest.json'>
+    <title>GNC Command Center</title>
+    <style>
+        :root {
+            --bg: #0b1120;
+            --card: #131c31;
+            --line: #23314d;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --acc: #38bdf8;
+            --ok: #22c55e;
+            --warn: #f59e0b;
+            --bad: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            padding-bottom: 84px;
+        }
+
+        header {
+            padding: 16px 16px 10px;
+            background: #0f172a;
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 18px;
+            letter-spacing: .4px;
+        }
+
+        header small {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 14px;
+            display: grid;
+            gap: 14px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .card h2 {
+            margin: 0 0 10px;
+            font-size: 15px;
+            color: var(--acc);
+            text-transform: uppercase;
+            letter-spacing: .6px;
+        }
+
+        .now-box {
+            border-left: 4px solid var(--ok);
+            background: #102235;
+        }
+
+        .row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        input,
+        select,
+        button {
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: #0b1324;
+            color: var(--text);
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+
+        input,
+        select {
+            flex: 1;
+            min-width: 140px;
+        }
+
+        button {
+            cursor: pointer;
+            background: var(--acc);
+            color: #061220;
+            font-weight: 700;
+            border: none;
+        }
+
+        button.sec {
+            background: #1e293b;
+            color: var(--text);
+            border: 1px solid var(--line);
+        }
+
+        button.bad {
+            background: #3b1620;
+            color: #fca5a5;
+            border: 1px solid #7f1d1d;
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+
+        .timer-big {
+            font-size: 44px;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            margin: 8px 0;
+            text-align: center;
+            color: #f8fafc;
+        }
+
+        .bar-wrap {
+            height: 10px;
+            background: #0b1324;
+            border-radius: 99px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            margin: 8px 0;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--acc), var(--ok));
+            width: 0%;
+            transition: .3s;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .tag {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 99px;
+            background: #1e293b;
+            color: var(--acc);
+            display: inline-block;
+        }
+
+        .grid2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+
+        a.res {
+            display: block;
+            text-decoration: none;
+            color: var(--text);
+            background: #0e172a;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        a.res:hover {
+            border-color: var(--acc);
+        }
+
+        a.res strong {
+            display: block;
+            color: var(--acc);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        a.res span {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0f172a;
+            border-top: 1px solid var(--line);
+            display: flex;
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 20;
+        }
+
+        nav button {
+            flex: 1;
+            background: none;
+            color: var(--muted);
+            border-radius: 0;
+            padding: 12px 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        nav button.active {
+            color: var(--acc);
+            border-top: 2px solid var(--acc);
+        }
+
+        .tab {
+            display: none;
+        }
+
+        .tab.active {
+            display: grid;
+            gap: 14px;
+        }
+
+        .urgent {
+            color: var(--bad);
+            font-weight: 700;
+        }
+
+        .soon {
+            color: var(--warn);
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>GNC &amp; Flight Control Command Center</h1><small id='clockLine'>Loading...</small>
+    </header>
+    <main>
+        <section id='tab-today' class='tab active'>
+            <div class='card now-box'>
+                <h2>Right Now on Your 40h Schedule</h2>
+                <div id='nowBlock' style='font-size:16px;font-weight:700;'></div>
+                <div id='nextBlock' style='font-size:13px;color:var(--muted);margin-top:4px;'></div>
+            </div>
+            <div class='card'>
+                <h2>Study Session Timer</h2>
+                <div class='row'><select id='timerSubject'>
+                        <option value='Thesis 6-DoF / Simulink'>Thesis 6-DoF / Simulink</option>
+                        <option value='C++ / Embedded'>C++ / Embedded</option>
+                        <option value='Muhendislik Matematigi I'>Muhendislik Matematigi I</option>
+                        <option value='Classical Control Theory'>Classical Control Theory</option>
+                        <option value='Modal Olcum ve Analiz'>Modal Olcum ve Analiz</option>
+                        <option value='Hardware / Maker Lab'>Hardware / Maker Lab</option>
+                        <option value='ANSYS Spine Wrap-up'>ANSYS Spine Wrap-up</option>
+                        <option value='Hidrojen Ekonomisi'>Hidrojen Ekonomisi</option>
+                    </select></div>
+                <div class='timer-big' id='timerDisplay'>00:00:00</div>
+                <div class='row' style='justify-content:center;'><button id='btnStartPause'>Start
+                        Session</button><button class='sec' id='btnSaveSess'>Finish &amp; Log</button><button
+                        class='bad' id='btnResetSess'>Reset</button></div>
+            </div>
+            <div class='card'>
+                <h2>This Week Progress (Target: 40 Hours)</h2>
+                <div id='weekSummary' style='font-size:14px;'></div>
+                <div class='bar-wrap'>
+                    <div id='weekBar' class='bar-fill'></div>
+                </div>
+                <div id='subjectBreakdown'></div>
+            </div>
+        </section>
+        <section id='tab-tasks' class='tab'>
+            <div class='card'>
+                <h2>Midterm &amp; Final Exam Countdowns</h2>
+                <div class='row' style='margin-bottom:10px;'><input id='exTitle'
+                        placeholder='Exam (e.g. Classical Control Midterm)'><input id='exDate'
+                        type='datetime-local'><button id='btnAddEx'>Add Exam</button></div>
+                <div id='examList'></div>
+            </div>
+            <div class='card'>
+                <h2>Homework &amp; Upcoming Events</h2>
+                <div class='row' style='margin-bottom:10px;'><input id='hwTitle'
+                        placeholder='HW / Event (e.g. Bogac Hoca meeting)'><input id='hwCourse'
+                        placeholder='Course / Tag' style='max-width:140px;'><input id='hwDate'
+                        type='datetime-local'><button id='btnAddHw'>Add</button></div>
+                <div id='taskList'></div>
+            </div>
+        </section>
+        <section id='tab-res' class='tab'>
+            <div class='card'>
+                <h2>1-Click GNC &amp; Study Resource Vault</h2>
+                <div class='row' style='margin-bottom:10px;'><input id='resName' placeholder='Resource Title'><input
+                        id='resUrl' placeholder='https://...'><input id='resNote' placeholder='Category / Why'><button
+                        id='btnAddRes'>Add Link</button></div>
+                <div class='grid2' id='resGrid'></div>
+            </div>
+        </section>
+        <section id='tab-road' class='tab'>
+            <div class='card'>
+                <h2>GNC Transformation Milestones</h2>
+                <div id='roadmapList'></div>
+            </div>
+            <div class='card'>
+                <h2>Recent Study Logs &amp; Backup</h2>
+                <div class='row' style='margin-bottom:10px;'><button class='sec' id='btnExp'>Export JSON
+                        Backup</button><button class='sec' id='btnImp'>Import JSON</button><input id='impFile'
+                        type='file' accept='.json' style='display:none'></div>
+                <div id='logList'></div>
+            </div>
+        </section>
+    </main>
+    <nav><button class='active' data-tab='today'>Today</button><button data-tab='tasks'>Exams &amp; HW</button><button
+            data-tab='res'>Resources</button><button data-tab='road'>Roadmap</button></nav>
+    <script>const SCHEDULE = { 1: [[8, 0, 9, 30, 'C++ Daily Drill (Home)'], [11, 15, 13, 55, 'Campus: Gunes Enerjisi Tabanli Hidrojen (D-703)'], [16, 30, 18, 0, 'ANSYS Spine Wrap-up / Thesis']], 2: [[9, 0, 13, 0, 'Deep Work: Thesis 6-DoF & Math (Home)'], [14, 0, 18, 0, 'Deep Work: C++ / Simulink Translation (Home)']], 3: [[8, 30, 12, 0, 'Math I & Control Hand Calculations (Home)'], [14, 0, 16, 40, 'Campus: Muhendislik Matematigi I (D-738)']], 4: [[11, 15, 13, 55, 'Campus: Classical Control Theory (D-738)'], [14, 0, 16, 40, 'Campus: Modal Olcum ve Analiz (D-738)'], [16, 45, 17, 30, 'Office Hours: Bilgic / Hacioglu / Burkan']], 5: [[9, 0, 13, 0, 'Deep Work: Changing-Mass Control Design (Home)'], [14, 0, 18, 0, 'Deep Work: Linux, Git, Python / PX4 (Home)']], 6: [[10, 0, 16, 0, 'Hardware & Embedded Maker Lab (Teensy/STM32)']], 0: [[17, 0, 19, 0, 'Weekly Review, Git Audit & Next Week Plan']] }; const DEFAULT_RES = [{ name: 'LearnCpp.com', url: 'https://www.learncpp.com/', note: 'Core Modern C++ (Ch 0-15)' }, { name: '3Blue1Brown Linear Algebra', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab', note: 'Rebuild math intuition fast' }, { name: 'Brian Douglas Control', url: 'https://www.youtube.com/@BrianBDouglas', note: 'Classical & discrete control' }, { name: 'Steve Brunton Control Bootcamp', url: 'https://www.youtube.com/playlist?list=PLMrJAkhIeNNR20Mz-VpzgfQs5zrYi085m', note: 'State-Space, LQR, Kalman' }, { name: 'Christopher Lum Flight Mech', url: 'https://www.youtube.com/@ChristopherLum', note: '6-DoF nonlinear flight sim' }, { name: 'dRehmFlight (Teensy)', url: 'https://github.com/nickrehm/dRehmFlight', note: '800-line readable flight code' }, { name: 'Phil Lab (STM32 & EKF)', url: 'https://www.youtube.com/@PhilsLab', note: 'Embedded C, Kalman, PCB' }, { name: 'PX4 Autopilot Docs', url: 'https://docs.px4.io/main/en/simulation/', note: 'Industry SIL/Gazebo stack' }, { name: 'MathWorks Academy', url: 'https://matlabacademy.mathworks.com/', note: 'Free MATLAB & Simulink Onramps' }, { name: 'SSA GSK Okulu', url: 'https://gskokulu.ssa.gov.tr/', note: 'Turkish Defense GNC Program' }]; const DEFAULT_ROAD = [{ id: 1, text: 'Push existing 1m Simulink drone files to GitHub', done: false }, { id: 2, text: 'Meet Dr. Bogac Bilgic to align changing-mass thesis scope', done: false }, { id: 3, text: 'Finish ANSYS sacrum FEA correction cleanly', done: false }, { id: 4, text: 'LearnCpp Ch 0-15 + write C++ 3x3 Matrix & RK4 integrator', done: false }, { id: 5, text: 'Build full 6-DoF nonlinear variable-mass quadrotor model', done: false }, { id: 6, text: 'Compare PID vs LQR vs Adaptive/Sliding Mode controller', done: false }, { id: 7, text: 'Read dRehmFlight or PX4 EKF2 & test on hardware', done: false }]; let state = JSON.parse(localStorage.getItem('gncState') || 'null') || { exams: [], tasks: [], logs: [], resources: DEFAULT_RES, roadmap: DEFAULT_ROAD }; function save() { localStorage.setItem('gncState', JSON.stringify(state)); } let timerRun = false, elapsedMs = 0, lastTick = 0; function fmt(sec) { const h = String(Math.floor(sec / 3600)).padStart(2, '0'), m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0'), s = String(sec % 60).padStart(2, '0'); return h + ':' + m + ':' + s; } function toggleTimer() { if (!timerRun) { timerRun = true; lastTick = Date.now(); document.getElementById('btnStartPause').textContent = 'Pause'; } else { elapsedMs += Date.now() - lastTick; timerRun = false; document.getElementById('btnStartPause').textContent = 'Resume'; } } function resetTimer() { timerRun = false; elapsedMs = 0; document.getElementById('btnStartPause').textContent = 'Start Session'; document.getElementById('timerDisplay').textContent = '00:00:00'; } function saveSession() { if (timerRun) { elapsedMs += Date.now() - lastTick; timerRun = false; } const mins = Math.round(elapsedMs / 60000); if (mins < 1) { alert('Study at least 1 minute before logging.'); return; } const note = prompt('1-line engineering log (e.g. Verified Bode margins / Git commit):', '') || 'Focused study'; state.logs.unshift({ id: Date.now(), subject: document.getElementById('timerSubject').value, mins: mins, note: note, date: new Date().toISOString() }); save(); resetTimer(); renderAll(); } function updateClockAndNow() { const now = new Date(); document.getElementById('clockLine').textContent = now.toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); if (timerRun) { const totalSec = Math.floor((elapsedMs + (Date.now() - lastTick)) / 1000); document.getElementById('timerDisplay').textContent = fmt(totalSec); } const d = now.getDay(), curMin = now.getHours() * 60 + now.getMinutes(), blocks = SCHEDULE[d] || []; let active = null, upcoming = null; for (const b of blocks) { const s = b[0] * 60 + b[1], e = b[2] * 60 + b[3]; if (curMin >= s && curMin <= e) active = b; else if (curMin < s && !upcoming) upcoming = b; } document.getElementById('nowBlock').textContent = active ? active[4] + ' (' + String(active[0]).padStart(2, '0') + ':' + String(active[1]).padStart(2, '0') + '-' + String(active[2]).padStart(2, '0') + ':' + String(active[3]).padStart(2, '0') + ')' : 'Buffer / Rest / Catch-up Time'; document.getElementById('nextBlock').textContent = upcoming ? 'Up next: ' + upcoming[4] + ' at ' + String(upcoming[0]).padStart(2, '0') + ':' + String(upcoming[1]).padStart(2, '0') : 'No more scheduled blocks today.'; } function weekStart() { const d = new Date(), day = d.getDay(), diff = d.getDate() - day + (day === 0 ? -6 : 1); return new Date(d.getFullYear(), d.getMonth(), diff, 0, 0, 0).getTime(); } function renderToday() { const ws = weekStart(), weekLogs = state.logs.filter(l => new Date(l.date).getTime() >= ws); const totalMin = weekLogs.reduce((a, b) => a + b.mins, 0), hrs = (totalMin / 60).toFixed(1); document.getElementById('weekSummary').textContent = hrs + ' / 40.0 hours logged this week'; document.getElementById('weekBar').style.width = Math.min(100, (totalMin / 2400) * 100) + '%'; const bySub = {}; weekLogs.forEach(l => { bySub[l.subject] = (bySub[l.subject] || 0) + l.mins; }); document.getElementById('subjectBreakdown').innerHTML = Object.entries(bySub).map(([k, v]) => `<div class='item'><span>` + k + `</span><span class='tag'>` + (v / 60).toFixed(1) + ` h</span></div>`).join('') || `<small style='color:var(--muted)'>No sessions logged this week yet.</small>`; } function addExam() { const t = document.getElementById('exTitle').value.trim(), d = document.getElementById('exDate').value; if (!t || !d) return; state.exams.push({ id: Date.now(), title: t, date: d }); state.exams.sort((a, b) => new Date(a.date) - new Date(b.date)); save(); document.getElementById('exTitle').value = ''; renderTasks(); } function addTask() { const t = document.getElementById('hwTitle').value.trim(), c = document.getElementById('hwCourse').value.trim() || 'General', d = document.getElementById('hwDate').value; if (!t || !d) return; state.tasks.push({ id: Date.now(), title: t, course: c, date: d, done: false }); state.tasks.sort((a, b) => new Date(a.date) - new Date(b.date)); save(); document.getElementById('hwTitle').value = ''; renderTasks(); } function dlICS(title, dateStr) { const dt = new Date(dateStr), pad = n => String(n).padStart(2, '0'), NL = String.fromCharCode(13, 10); const fmtD = x => x.getUTCFullYear() + pad(x.getUTCMonth() + 1) + pad(x.getUTCDate()) + 'T' + pad(x.getUTCHours()) + pad(x.getUTCMinutes()) + '00Z'; const end = new Date(dt.getTime() + 3600000); const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'BEGIN:VEVENT', 'SUMMARY:' + title, 'DTSTART:' + fmtD(dt), 'DTEND:' + fmtD(end), 'BEGIN:VALARM', 'TRIGGER:-PT60M', 'ACTION:DISPLAY', 'DESCRIPTION:Reminder', 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join(NL); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' })); a.download = 'reminder.ics'; a.click(); } function dlExamIcs(id) { const e = state.exams.find(x => x.id === id); if (e) dlICS(e.title, e.date); } function dlTaskIcs(id) { const t = state.tasks.find(x => x.id === id); if (t) dlICS(t.title, t.date); } function renderTasks() { const now = Date.now(); document.getElementById('examList').innerHTML = state.exams.map(e => { const diff = new Date(e.date) - now, days = Math.floor(diff / 86400000), hrs = Math.floor((diff % 86400000) / 3600000); const cls = days < 5 ? 'urgent' : (days < 14 ? 'soon' : ''); const cd = diff > 0 ? days + 'd ' + hrs + 'h left' : 'Exam Passed'; return `<div class='item'><div><strong>` + e.title + `</strong><br><small style='color:var(--muted)'>` + new Date(e.date).toLocaleString() + `</small></div><div class='row'><span class='` + cls + `'>` + cd + `</span><button class='sec' onclick='dlExamIcs(` + e.id + `)'>iOS Cal</button><button class='bad' onclick='delExam(` + e.id + `)'>X</button></div></div>`; }).join('') || `<small style='color:var(--muted)'>Add your Midterms &amp; Finals above.</small>`; document.getElementById('taskList').innerHTML = state.tasks.map(t => `<div class='item'><div><input type='checkbox' ` + (t.done ? `checked` : ``) + ` onchange='togTask(` + t.id + `)' style='min-width:auto;flex:0;'> <span style='` + (t.done ? `text-decoration:line-through;color:var(--muted)` : ``) + `'>` + t.title + `</span> <span class='tag'>` + t.course + `</span><br><small style='color:var(--muted)'>Due: ` + new Date(t.date).toLocaleString() + `</small></div><div class='row'><button class='sec' onclick='dlTaskIcs(` + t.id + `)'>iOS Cal</button><button class='bad' onclick='delTask(` + t.id + `)'>X</button></div></div>`).join('') || `<small style='color:var(--muted)'>No homework or events yet.</small>`; } function delExam(id) { state.exams = state.exams.filter(x => x.id !== id); save(); renderTasks(); } function delTask(id) { state.tasks = state.tasks.filter(x => x.id !== id); save(); renderTasks(); } function togTask(id) { const t = state.tasks.find(x => x.id === id); if (t) { t.done = !t.done; save(); renderTasks(); } } function addResource() { const n = document.getElementById('resName').value.trim(), u = document.getElementById('resUrl').value.trim(), o = document.getElementById('resNote').value.trim(); if (!n || !u) return; state.resources.unshift({ name: n, url: u, note: o }); save(); document.getElementById('resName').value = ''; document.getElementById('resUrl').value = ''; renderRes(); } function renderRes() { document.getElementById('resGrid').innerHTML = state.resources.map(r => `<a class='res' href='` + r.url + `' target='_blank' rel='noopener'><strong>` + r.name + ` &rarr;</strong><span>` + r.note + `</span></a>`).join(''); } function renderRoad() { document.getElementById('roadmapList').innerHTML = state.roadmap.map(m => `<div class='item'><div><input type='checkbox' ` + (m.done ? `checked` : ``) + ` onchange='togRoad(` + m.id + `)' style='min-width:auto;flex:0;'> <span style='` + (m.done ? `text-decoration:line-through;color:var(--muted)` : ``) + `'>` + m.text + `</span></div></div>`).join(''); document.getElementById('logList').innerHTML = state.logs.slice(0, 15).map(l => `<div class='item'><div><strong>` + l.subject + `</strong> (` + l.mins + ` min)<br><small style='color:var(--muted)'>` + l.note + ` - ` + new Date(l.date).toLocaleDateString() + `</small></div></div>`).join('') || `<small style='color:var(--muted)'>No logged sessions yet.</small>`; } function togRoad(id) { const m = state.roadmap.find(x => x.id === id); if (m) { m.done = !m.done; save(); renderRoad(); } } function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' })); a.download = 'gnc-backup.json'; a.click(); } function importData(e) { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = ev => { state = JSON.parse(ev.target.result); save(); renderAll(); }; r.readAsText(f); } document.getElementById('btnStartPause').onclick = toggleTimer; document.getElementById('btnSaveSess').onclick = saveSession; document.getElementById('btnResetSess').onclick = resetTimer; document.getElementById('btnAddEx').onclick = addExam; document.getElementById('btnAddHw').onclick = addTask; document.getElementById('btnAddRes').onclick = addResource; document.getElementById('btnExp').onclick = exportData; document.getElementById('btnImp').onclick = function () { document.getElementById('impFile').click(); }; document.getElementById('impFile').onchange = importData; document.querySelectorAll('nav button').forEach(btn => { btn.onclick = function () { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('nav button').forEach(b => b.classList.remove('active')); document.getElementById('tab-' + btn.dataset.tab).classList.add('active'); btn.classList.add('active'); }; }); function renderAll() { renderToday(); renderTasks(); renderRes(); renderRoad(); updateClockAndNow(); } if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').catch(() => { }); } setInterval(updateClockAndNow, 1000); renderAll();</script>
+</body>
+
+</html>
